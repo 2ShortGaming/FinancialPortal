@@ -45,5 +45,6 @@ namespace FinancialPortal.Models
         {
             return new ApplicationDbContext();
         }
+        public DbSet<BudgetItem> BudgetItems { get; set; }
     }
 }

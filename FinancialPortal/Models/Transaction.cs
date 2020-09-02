@@ -13,7 +13,7 @@ namespace FinancialPortal.Models
 
         [Display(Name = "Bank Account")]
         public int AccountId { get; set; }
-        public virtual BankAccount BankAccount { get; set; }
+        public virtual BankAccount Account { get; set; }
         public int? BudgetItemId { get; set; }
         public virtual BudgetItem BudgetItem { get; set; }
         public string  OwnerId { get; set; }

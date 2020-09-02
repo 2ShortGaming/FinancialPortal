@@ -33,7 +33,7 @@ namespace FinancialPortal.Models
 
         public virtual ICollection<Transaction> Transactions { get; set; }
 
-        //public AccountType AccountType { get; set; }
+        public AccountType AccountType { get; set; }
         public BankAccount(decimal startingBalance, decimal warningBalance, string accountName)
         {
             Transactions = new HashSet<Transaction>();

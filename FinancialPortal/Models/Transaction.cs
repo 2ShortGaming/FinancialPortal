@@ -19,7 +19,7 @@ namespace FinancialPortal.Models
         public string  OwnerId { get; set; }
         public virtual ApplicationUser Owner { get; set; }
 
-        //public TransactionType TransactionType { get; set; }
+        public TransactionType TransactionType { get; set; }
 
         public DateTime Created { get; set; }
         public decimal Amount { get; set; }

@@ -1,0 +1,156 @@
+﻿@model FinancialPortal.Models.ExtendedRegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = null;
+}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Swaney | $$aver</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico">
+
+    <!-- CSS
+    ============================================ -->
+    <!-- Bootstrap CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Icon Font CSS -->
+    <link href="~/Content/material-design-iconic-font.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/material-design-iconic-font.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/themify-icons.css" rel="stylesheet" />
+    <link href="~/Content/cryptocurrency-icons.css" rel="stylesheet" />
+
+    <!-- Plugins CSS -->
+    <link href="~/Content/plugins.css" rel="stylesheet" />
+
+    <!-- Helper CSS -->
+    <link href="~/Content/helper.css" rel="stylesheet" />
+
+    <!-- Main Style CSS -->
+    <link href="~/Content/style.css" rel="stylesheet" />
+   
+</head>
+
+<body class="skin-dark">
+
+    <div class="main-wrapper">
+
+        <!-- Content Body Start -->
+        <div class="content-body m-0 p-0">
+
+            <div class="login-register-wrap">
+                <div class="row">
+
+                    <div class="d-flex align-self-center justify-content-center order-2 order-lg-1 col-lg-5 col-12">
+                        <div class="login-register-form-wrap">
+
+                            <div class="content">
+                                <h1>Sign up</h1>
+                            </div>
+
+                            <div class="login-register-form">
+
+                                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <h4>Create a new account.</h4>
+                                    <hr />
+                                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("FirstName", "First Name", new { @class = "col-md-6 control-label" })
+                                        <div class="col-md-12">
+                                            @Html.TextBox("FirstName", "", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("LastName", "Last Name", new { @class = "col-md-6 control-label" })
+                                        <div class="col-md-12">
+                                            @Html.TextBox("LastName", "", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>Avatar Image Upload</label>
+                                            <input name="Avatar" type="file" class="form-control col-md-12" id="fileUpload" />
+                                            @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                                        <div class="col-md-12">
+                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-6 control-label" })
+                                        <div class="col-md-12">
+                                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" class="button button-primary button-outline" value="Register" />
+                                        </div>
+                                    </div>
+                                }
+                                <hr />
+                                <div class="card-footer text-center py-3">
+                                    <p class="text-warning mb-0">Already have an account? <a href="@Url.Action("Login", "Account")"> Sign In here</a></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="login-register-bg order-1 order-lg-2 col-lg-7 col-12">
+                        <div class="content">
+                            <h1>Sign up</h1>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- Content Body End -->
+    </div>
+
+    <!-- JS
+    ============================================ -->
+    <!-- Global Vendor, plugins & Activation JS -->
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/vendor/popper.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <!--Plugins JS-->
+    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/plugins/tippy4.min.js.js"></script>
+    <!--Main JS-->
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

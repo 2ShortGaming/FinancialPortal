@@ -4,72 +4,173 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<br />
+<br />
+<br />
+<br />
+<br />
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Household.HouseholdName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Owner.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AccountName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Created)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StartingBalance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrentBalance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.WarningBalance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Household.HouseholdName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Owner.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccountName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Created)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartingBalance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CurrentBalance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.WarningBalance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsDeleted)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
 
-</table>
+<div class="col-12 mb-30">
+    <div class="box">
+        <div class="box-head">
+            <h4 class="title">Accounts Overview</h4>
+        </div>
+        <div class="box-body">
+            @*<div class="col-5 offset-9">
+            <button type="button" class="col-md-5 button button-primary button-outline" data-toggle="modal" data-target="#addBankAccount">
+                Add Bank Account
+            </button>
+            </div>*@
+            <div class="table-responsive">
+                <table class="table table-vertical-middle table-selectable">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Household.HouseholdName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Owner.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AccountName)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.StartingBalance)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CurrentBalance)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.WarningBalance)
+                        </th>
+
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Household.HouseholdName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Owner.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AccountName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartingBalance)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CurrentBalance)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WarningBalance)
+                            </td>
+
+                            <td>
+                           
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+         
+                
+         
+        </div>
+    </div>
+</div>
+
+
+<section id="accountModal">
+
+    <!-- Modal -->
+    <div id="addBankAccount" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Bank Account</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("Create", "BankAccounts", FormMethod.Post, null))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                        <div class="form-group">
+                            @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-12">
+                                @Html.Editor("AccountName", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessage("AccountName", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-12">
+                                @Html.Editor("AccountType", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessage("AccountType", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Starting Balance", htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-12">
+                                @Html.Editor("StartingBalance", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessage("StartingBalance", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Current Balance", htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-12">
+                                @Html.Editor("CurrentBalance", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessage("CurrentBalance", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("WarningBalance", htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-12">
+                                @Html.Editor("WarningBalance", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessage("WarningBalance", "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <br />
+
+
+                        <div class="form-group">
+                            <div class="col-md-2 offset-4" style="padding-left:3em">
+                                <input type="submit" value="Create" class="button button-primary button-outline" />
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="button button-outline button-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

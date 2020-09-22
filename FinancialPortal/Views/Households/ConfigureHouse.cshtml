@@ -1,0 +1,106 @@
+﻿@model FinancialPortal.ViewModels.ConfigureHouseVM
+
+@{
+    ViewBag.Title = "ConfigureHouse";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    <div class="box col-6 offset-3">
+
+        <div class="form-horizontal">
+            <div class="box-head">
+                <h4 class="text-center">Configure House</h4>
+            </div>
+            <br />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.HouseholdId)
+            <div class="box-body card-body">
+                <section id="bankAccountInputs">
+
+                    <div class="form-group offset-2">
+                        @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-4 offset-2" })
+                        <div class="col-md-8 offset-2">
+                            @Html.EditorFor(model => model.BankAccount.AccountName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BankAccount.AccountName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group offset-2">
+                        @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-4 offset-2" })
+                        <div class="col-md-8 offset-2">
+                            @Html.EnumDropDownListFor(model => model.BankAccount.AccountType, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.BankAccount.AccountType, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group offset-2">
+                        @Html.Label("Starting Balance", htmlAttributes: new { @class = "control-label col-md-4 offset-2" })
+                        <div class="col-md-8 offset-2">
+                            @Html.EditorFor(model => model.StartingBalance, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.StartingBalance, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group offset-2">
+                        @Html.Label("WarningBalance", htmlAttributes: new { @class = "control-label col-md-4 offset-2" })
+                        <div class="col-md-8 offset-2">
+                            @Html.EditorFor(model => model.BankAccount.WarningBalance, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BankAccount.WarningBalance, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </section>
+
+
+                <section id="budgetInputs">
+                    <div class="form-group offset-2">
+                        @Html.Label("Budget Name", htmlAttributes: new { @class = "control-label col-md-4 offset-2" })
+                        <div class="col-md-8 offset-2">
+                            @Html.EditorFor(model => model.Budget.BudgetName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Budget.BudgetName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </section>
+
+
+                <section id="budgetItemInputs">
+
+                    <div class="form-group offset-2">
+                        @Html.Label("Item Name", htmlAttributes: new { @class = "control-label col-md-4 offset-2" })
+                        <div class="col-md-8 offset-2">
+                            @Html.EditorFor(model => model.BudgetItem.ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BudgetItem.ItemName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group offset-2">
+                        @Html.Label("Target Amount", htmlAttributes: new { @class = "control-label col-md-4 offset-2" })
+                        <div class="col-md-8 offset-2">
+                            @Html.EditorFor(model => model.BudgetItem.TargetAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BudgetItem.TargetAmount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </section>
+                <br />
+
+                <div class="form-group">
+                    <div class="col-md-2 offset-4" style="padding-left:3em">
+                        <input type="submit" value="Create" class="btn btn-outline-primary" />
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="text-center">
+    @Html.ActionLink("Back to List", "Index")
+</div>
+    </div>
+}
+<br />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

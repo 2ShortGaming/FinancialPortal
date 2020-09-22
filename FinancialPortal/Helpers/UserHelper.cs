@@ -23,6 +23,7 @@ namespace FinancialPortal.Helpers
             var user = db.Users.Find(userId);
             return user.FullName;
         }
+     
         public string GetAvatarPath()
         {
             var userId = HttpContext.Current.User.Identity.GetUserId();
@@ -41,5 +42,12 @@ namespace FinancialPortal.Helpers
         {
             return null;
         }
+
+        //public string GetUserAccounts()
+        //{
+        //    var userId = HttpContext.Current.User.Identity.GetUserId();
+        //    var user = db.Users.Find(userId);
+        //    var bankAccount = db.BankAccounts.ToList();
+        //}
     }
 }

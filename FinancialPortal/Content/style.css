@@ -11442,20 +11442,20 @@ body.side-header-green .side-header .side-header-close {
 /*----------------------------------------*/
 /*Author Top*/
 .author-top .inner {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  background-image: url(../images/bg/author-top-bg.jpg);
-  background-size: 100% 50%;
-  background-repeat: no-repeat;
-  padding: 65px 30px;
-  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.05);
-          box-shadow: 0 5px 5px rgba(0, 0, 0, 0.05);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    background-image: url(../images/bg/header-mail-bg.jpg);
+    background-size: 100% 50%;
+    background-repeat: no-repeat;
+    padding: 65px 30px;
+    -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.05);
 }
 
 .author-top .inner .author-profile {
@@ -11756,7 +11756,7 @@ body.side-header-green .side-header .side-header-close {
 
 /*Login & Resister BG*/
 .login-register-bg {
-  background-image: url(../images/bg/login-register-bg.jpg);
+  background-image: url(.../Images/logbg.jpg) !important;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;

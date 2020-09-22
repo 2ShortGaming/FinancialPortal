@@ -1,4 +1,13 @@
-﻿@using FinancialPortal.Helpers 
+﻿@using FinancialPortal.Helpers
+@using Microsoft.AspNet.Identity
+@using FinancialPortal.Extensions
+@using FinancialPortal.ViewModels
+@using FinancialPortal.Models
+@{
+    var userHelper = new UserHelper();
+    var roleHelper = new RolesHelper();
+    var account = new FinancialPortal.Models.BankAccount();
+}
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -19,8 +28,8 @@
 
 
     <!-- Icon Font CSS -->
-    <link href="~/Content/material-design-iconic-font.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/material-design-iconic-font.min.css" rel="stylesheet" />
     <link href="~/Content/themify-icons.css" rel="stylesheet" />
     <link href="~/Content/cryptocurrency-icons.css" rel="stylesheet" />
 
@@ -32,7 +41,7 @@
 
     <!-- Main Style CSS -->
     <link href="~/Content/style.css" rel="stylesheet" />
-    
+
 </head>
 
 <body class="skin-dark">
@@ -47,9 +56,9 @@
 
                     <!-- Header Logo (Header Left) Start -->
                     <div class="header-logo col-auto">
-                        <a href="index.html">
-                            <img src="assets/images/logo/logo.png" alt="">
-                            <img src="assets/images/logo/logo-light.png" class="logo-light" alt="">
+                        <a href="@Url.Action("Index", "Home")">
+                            <img src="~/Images/fplogo2.png" alt="">
+                            <img src="~/Images/fplogo2.png" class="logo-light" alt="">
                         </a>
                     </div><!-- Header Logo (Header Left) End -->
                     <!-- Header Right Start -->
@@ -88,19 +97,6 @@
 
                                 <ul class="header-notification-area">
 
-                                    <!--Language-->
-                                    <li class="adomx-dropdown position-relative col-auto">
-                                        <a class="toggle" href="#"><img class="lang-flag" src="assets/images/flags/flag-1.jpg" alt=""><i class="zmdi zmdi-caret-down drop-arrow"></i></a>
-
-                                        <!-- Dropdown -->
-                                        <ul class="adomx-dropdown-menu dropdown-menu-language">
-                                            <li><a href="#"><img src="assets/images/flags/flag-1.jpg" alt=""> English</a></li>
-                                            <li><a href="#"><img src="assets/images/flags/flag-2.jpg" alt=""> Japanese</a></li>
-                                            <li><a href="#"><img src="assets/images/flags/flag-3.jpg" alt=""> Spanish </a></li>
-                                            <li><a href="#"><img src="assets/images/flags/flag-4.jpg" alt=""> Germany</a></li>
-                                        </ul>
-
-                                    </li>
 
                                     <!--Mail-->
                                     <li class="adomx-dropdown col-auto">
@@ -115,7 +111,7 @@
                                                 <ul>
                                                     <li>
                                                         <a href="#">
-                                                            <div class="image"><img src="assets/images/avatar/avatar-2.jpg" alt=""></div>
+                                                            <div class="image"><img src="~/Images/avatar/avatar-2.jpg" alt=""></div>
                                                             <div class="content">
                                                                 <h6>Sub: New Account</h6>
                                                                 <p>There are many variations of passages of Lorem Ipsum available. </p>
@@ -125,7 +121,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="#">
-                                                            <div class="image"><img src="assets/images/avatar/avatar-1.jpg" alt=""></div>
+                                                            <div class="image"><img src="~/Images/avatar/avatar-1.jpg" alt=""></div>
                                                             <div class="content">
                                                                 <h6>Sub: Mail Support</h6>
                                                                 <p>There are many variations of passages of Lorem Ipsum available. </p>
@@ -135,7 +131,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="#">
-                                                            <div class="image"><img src="assets/images/avatar/avatar-2.jpg" alt=""></div>
+                                                            <div class="image"><img src="~/Images/avatar/avatar-2.jpg" alt=""></div>
                                                             <div class="content">
                                                                 <h6>Sub: Product inquiry</h6>
                                                                 <p>There are many variations of passages of Lorem Ipsum available. </p>
@@ -145,7 +141,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="#">
-                                                            <div class="image"><img src="assets/images/avatar/avatar-1.jpg" alt=""></div>
+                                                            <div class="image"><img src="~/Images/avatar/avatar-1.jpg" alt=""></div>
                                                             <div class="content">
                                                                 <h6>Sub: Mail Support</h6>
                                                                 <p>There are many variations of passages of Lorem Ipsum available. </p>
@@ -248,28 +244,32 @@
                                         <a class="toggle" href="#">
                                             <span class="user">
                                                 <span class="avatar">
-                                                    <img src="assets/images/avatar/avatar-1.jpg" alt="">
+                                                    <img src="@User.Identity.GetAvatarPath()" alt="">
                                                     <span class="status"></span>
                                                 </span>
-                                                <span class="name">Madison Howard</span>
+                                                <span class="name">@User.Identity.GetFullName()</span>
                                             </span>
                                         </a>
 
                                         <!-- Dropdown -->
                                         <div class="adomx-dropdown-menu dropdown-menu-user">
                                             <div class="head">
-                                                <h5 class="name"><a href="#">Madison Howard</a></h5>
-                                                <a class="mail" href="#">mailnam@mail.com</a>
+                                                <h5 class="name"><a href="#"></a>@userHelper.GetFullName(User.Identity.GetUserId())</h5>
+                                                <a class="mail" href="#">@User.Identity.GetUserName()</a>
                                             </div>
                                             <div class="body">
                                                 <ul>
-                                                    <li><a href="#"><i class="zmdi zmdi-account"></i>Profile</a></li>
+                                                    <li><a href="@Url.Action("UpdateProfile", "Manage")"><i class="zmdi zmdi-account"></i>Profile</a></li>
                                                     <li><a href="#"><i class="zmdi zmdi-email-open"></i>Inbox</a></li>
                                                     <li><a href="#"><i class="zmdi zmdi-wallpaper"></i>Activity</a></li>
                                                 </ul>
                                                 <ul>
                                                     <li><a href="#"><i class="zmdi zmdi-settings"></i>Setting</a></li>
-                                                    <li><a href="#"><i class="zmdi zmdi-lock-open"></i>Sing out</a></li>
+                                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "preview-subject mb-1" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="zmdi zmdi-lock-open"></i>Sign out</a></li>
+                                                    }
                                                 </ul>
                                                 <ul>
                                                     <li><a href="#"><i class="zmdi zmdi-paypal"></i>Payment</a></li>
@@ -301,136 +301,59 @@
                         <li class="has-sub-menu">
                             <a href="#"><i class="ti-home"></i> <span>Dashboard</span></a>
                             <ul class="side-header-sub-menu">
-                                <li><a href="index.html"><span>E-commerce (Default)</span></a></li>
-                                <li><a href="index-crypto.html"><span>Cryptocurrency</span></a></li>
-                            </ul>
-                        </li>
-                        <li><a href="widgets.html"><i class="ti-palette"></i> <span>Widgets</span></a></li>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-package"></i> <span>Basic Elements</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="elements-alerts.html"><span>Alerts</span></a></li>
-                                <li><a href="elements-accordions.html"><span>Accordions</span></a></li>
-                                <li><a href="elements-avatar.html"><span>Avatar</span></a></li>
-                                <li><a href="elements-badge.html"><span>Badge</span></a></li>
-                                <li><a href="elements-buttons.html"><span>Buttons</span></a></li>
-                                <li><a href="elements-carousel.html"><span>Carousel</span></a></li>
-                                <li><a href="elements-dropdown.html"><span>Dropdown</span></a></li>
-                                <li><a href="elements-list-group.html"><span>List Group</span></a></li>
-                                <li><a href="elements-media.html"><span>Media</span></a></li>
-                                <li><a href="elements-modal.html"><span>Modal</span></a></li>
-                                <li><a href="elements-pagination.html"><span>Pagination</span></a></li>
-                                <li><a href="elements-progress.html"><span>Progress Bar</span></a></li>
-                                <li><a href="elements-spinners.html"><span>Spinners</span></a></li>
-                                <li><a href="elements-tabs.html"><span>Tabs</span></a></li>
-                                <li><a href="elements-tooltip.html"><span>Tooltip</span></a></li>
-                                <li><a href="elements-typography.html"><span>Typography</span></a></li>
+                                <li><a href="index.html"><span></span></a></li>
+
                             </ul>
                         </li>
                         <li class="has-sub-menu">
-                            <a href="#"><i class="ti-crown"></i> <span>Advance Elements</span></a>
+                            <a href="#"><i class="ti-home"></i> <span>Household</span></a>
                             <ul class="side-header-sub-menu">
-                                <li><a href="elements-clipboard.html"><span>Clipboard</span></a></li>
-                                <li><a href="elements-fullcalendar.html"><span>Full Calendar</span></a></li>
-                                <li><a href="elements-media-player.html"><span>Media Player</span></a></li>
-                                <li><a href="elements-sortable.html"><span>Sortable (Drag&Drop)</span></a></li>
-                                <li><a href="elements-toastr.html"><span>Toastr</span></a></li>
-                                <li><a href="elements-rating.html"><span>Rating</span></a></li>
-                                <li><a href="elements-sweetalert.html"><span>Sweet Alert</span></a></li>
+                                <li><a href="elements-alerts.html"><span>Dashboard</span></a></li>
+                                <li><a href="@Url.Action("Index", "Transactions")"><i class="zmdi zmdi-confirmation-number"></i> <span>Transactions</span></a></li>
+                                <li><a href="@Url.Action("Index", "BankAccounts")"><span>Accounts</span></a></li>
+                                <li><a href="elements-badge.html"><i class="zmdi zmdi-accounts"></i> <span>Members</span></a></li>
+                                <li><a href="@Url.Action("ConfigureHouse", "HouseHold")"><span>Create a Household</span></a></li>
                             </ul>
                         </li>
                         <li class="has-sub-menu">
-                            <a href="#"><i class="ti-stamp"></i> <span>Icons</span></a>
+                            <a href="#"><i class="zmdi zmdi-balance"></i> <span>Bank Accounts</span></a>
                             <ul class="side-header-sub-menu">
-                                <li><a href="icons-cryptocurrency.html"><span>Cryptocurrency</span></a></li>
-                                <li><a href="icons-fontawesome.html"><span>Font Awesome</span></a></li>
-                                <li><a href="icons-material.html"><span>Material Icon</span></a></li>
-                                <li><a href="icons-themify.html"><span>Themify Icon</span></a></li>
+                                <li><a href="@Url.Action("Index", "BankAccounts")"><span>View Accounts</span></a></li>
+                              
+                                <li><a data-toggle="modal" data-target="#addAccount"><i class="zmdi zmdi-plus-circle"></i> <span>Add Bank Account</span></a></li>
                             </ul>
                         </li>
                         <li class="has-sub-menu">
-                            <a href="#"><i class="ti-notepad"></i> <span>Forms</span></a>
+                            <a href="#"><i class="fa fa-envelope-open-o"></i> <span>Invite-Join Household</span></a>
                             <ul class="side-header-sub-menu">
-                                <li><a href="form-basic-elements.html"><span>Basic Elements</span></a></li>
-                                <li><a href="form-checkbox.html"><span>Checkbox</span></a></li>
-                                <li><a href="form-date-mask.html"><span>Date & Mask</span></a></li>
-                                <li><a href="form-editor.html"><span>Editor</span></a></li>
-                                <li><a href="form-file-upload.html"><span>File Upload</span></a></li>
-                                <li><a href="form-layout.html"><span>Layout</span></a></li>
-                                <li><a href="form-radio.html"><span>Radio</span></a></li>
-                                <li><a href="form-range-slider.html"><span>Range Slider</span></a></li>
-                                <li><a href="form-selects.html"><span>Selects</span></a></li>
-                                <li><a href="form-switchers.html"><span>Switchers</span></a></li>
-                                <li><a href="form-wizard.html"><span>Wizard</span></a></li>
+                                <li>
+                                    <button type="button" class="col-md-5 button button-primary button-outline" data-toggle="modal" data-target="#inviteUser">
+                                        Invite
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="col-md-7 button button-primary button-outline" data-toggle="modal" data-target="#manualJoin">
+                                        Manual Join
+                                    </button>
+                                </li>
+
                             </ul>
                         </li>
                         <li class="has-sub-menu">
-                            <a href="#"><i class="ti-layout"></i> <span>Table</span></a>
+                            <a href="#"><i class="fa fa-times-rectangle-o"></i> <span>Leave Household</span></a>
                             <ul class="side-header-sub-menu">
-                                <li><a href="table-basic.html"><span>Basic</span></a></li>
-                                <li><a href="table-data-table.html"><span>Data Table</span></a></li>
-                                <li><a href="table-footable.html"><span>Footable</span></a></li>
-                                <li><a href="table-jsgrid.html"><span>Jsgrid</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-pie-chart"></i> <span>Charts</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="chart-chartjs.html"><span>ChartJs</span></a></li>
-                                <li><a href="chart-echarts.html"><span>Echarts</span></a></li>
-                                <li><a href="chart-google.html"><span>Google Chart</span></a></li>
-                                <li><a href="chart-morris.html"><span>Morris  Chart</span></a></li>
-                                <li><a href="chart-sparkline.html"><span>Sparkline  Chart</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-map"></i> <span>Maps</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="map-vector.html"><span>Vector Map</span></a></li>
-                                <li><a href="map-google.html"><span>Google Map</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-shopping-cart"></i> <span>E-commerce</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="add-product.html"><span>Add Product</span></a></li>
-                                <li><a href="edit-product.html"><span>Edit Product</span></a></li>
-                                <li><a href="invoice-list.html"><span>Invoice List</span></a></li>
-                                <li><a href="invoice-details.html"><span>Invoice Details</span></a></li>
-                                <li><a href="order-list.html"><span>Order List</span></a></li>
-                                <li><a href="order-details.html"><span>Order Details</span></a></li>
-                                <li><a href="manage-products.html"><span>Manage Products</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-gift"></i> <span>Apps</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="chat.html"><span>Chat</span></a></li>
-                                <li><a href="mail.html"><span>Mail</span></a></li>
-                                <li><a href="single-mail.html"><span>Single Mail</span></a></li>
-                                <li><a href="todo-list.html"><span>Todo List</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-lock"></i> <span>Authentication</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="login.html"><span>login</span></a></li>
-                                <li><a href="register.html"><span>register</span></a></li>
-                                <li><a href="author-profile.html"><span>Profile</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-layers"></i> <span>Pages</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="blank.html"><span>Blank</span></a></li>
-                                <li><a href="timeline.html"><span>Timeline</span></a></li>
-                                <li><a href="pricing.html"><span>Pricing</span></a></li>
-                                <li><a href="error-1.html"><span>error-1</span></a></li>
-                                <li><a href="error-2.html"><span>error-2</span></a></li>
+                                <li>
+                                    <button type="button" class="col-md-5 button button-primary button-outline" data-toggle="modal" data-target="#leaveHouse">
+                                        Leave
+                                    </button>
+                                </li>
                             </ul>
                         </li>
 
+
+
                     </ul>
+
                 </nav>
 
             </div><!-- Side Header Inner End -->
@@ -441,13 +364,174 @@
             <div class="container-fluid">
 
                 <div class="footer-copyright text-center">
-                    <p class="text-body-light">2019 &copy; <a href="https://themeforest.net/user/codecarnival">Codecarnival</a></p>
+                    <p class="text-body-light">2019 &copy; <a href="https://themeforest.net/user/codecarnival">Codecarnival</a> and Modified by <a href="https://swaney-portfolio-cf-trn.netlify.app/" target="_blank">Brandon Swaney</a></p>
                 </div>
 
             </div>
         </div><!-- Footer Section End -->
 
     </div>
+    <section id="manualJoinModal">
+
+        <!-- Modal -->
+        <div id="manualJoin" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Manually Join a Household</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("ManualJoin", "Account", FormMethod.Post, null))
+                        {
+                            <div class="form-group">
+                                Invitation Code
+                                <div class="col-md-10">
+                                    @Html.TextBox("Code", "", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Join" class="button button-primary button-outline" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="button button-secondary button-outline">Save Changes</button>
+                        <button type="button" class="button button-outline button-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="InviteModal">
+
+        <!-- Modal -->
+        <div id="inviteUser" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Invite A Member to Household</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("ModalCreate", "Invitations", FormMethod.Post, null))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.Label("RecipientEmail", "Recipient Email", htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-10">
+                                        @Html.Editor("RecipientEmail", "Recipient Email", new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessage("RecipientEmail", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Send Invite" class="button button-primary button-outline" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="button button-outline button-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="leaveModal">
+
+        <!-- Modal -->
+        <div id="leaveHouse" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Leave a Household</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "leaveForm", @class = "navbar-right" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <p>By clicking Leave House you will leave the household you are currently in.</p>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" href="javascript:document.getElementById('leaveForm').submit()" value="Leave House" class="button button-primary button-outline" />
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="button button-outline button-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="addBankModal">
+
+        <!-- Modal -->
+        <div id="addAccount" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add a Bank Account</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        @Html.Action("_BankAccountModal", "BankAccounts")
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="button button-outline button-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <!-- JS
     ============================================ -->

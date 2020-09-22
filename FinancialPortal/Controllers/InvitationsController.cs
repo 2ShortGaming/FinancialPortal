@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using FinancialPortal.Extensions;
 using FinancialPortal.Models;
 
 namespace FinancialPortal.Controllers
@@ -14,33 +16,17 @@ namespace FinancialPortal.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Invitations
-        public ActionResult Index()
-        {
-            var invitations = db.Invitations.Include(i => i.Household);
-            return View(invitations.ToList());
-        }
-
-        // GET: Invitations/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Invitation invitation = db.Invitations.Find(id);
-            if (invitation == null)
-            {
-                return HttpNotFound();
-            }
-            return View(invitation);
-        }
-
         // GET: Invitations/Create
+        [Authorize(Roles = "Head")]
         public ActionResult Create()
         {
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "HouseholdName");
-            return View();
+            var hhId = User.Identity.GetHouseholdId();
+            if(hhId == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var invitation = new Invitation((int)hhId);
+            return View(invitation);
         }
 
         // POST: Invitations/Create
@@ -48,17 +34,36 @@ namespace FinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseholdId,Body,IsValid,Created,TTL,RecipientEmail,Code")] Invitation invitation)
+        public async Task<ActionResult> Create(Invitation invite)
         {
             if (ModelState.IsValid)
             {
-                db.Invitations.Add(invitation);
+                invite.Code = Guid.NewGuid();
+                db.Invitations.Add(invite);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                await invite.SendInvitation();
+
+                return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.HouseholdId = new SelectList(db.Households, "Id", "HouseholdName", invitation.HouseholdId);
-            return View(invitation);
+       
+            return View(invite);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ModalCreate(string recipientEmail)
+        {
+            var invite = new Invitation((int)User.Identity.GetHouseholdId());
+            invite.RecipientEmail = recipientEmail;
+                invite.Code = Guid.NewGuid();
+                db.Invitations.Add(invite);
+                db.SaveChanges();
+
+                await invite.SendInvitation();
+
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Invitations/Edit/5

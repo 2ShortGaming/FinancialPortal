@@ -179,12 +179,26 @@
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Enums\AccountType.cs" />
     <Compile Include="Enums\TransactionType.cs" />
+    <Compile Include="Extensions\AuthorizeExtensions.cs" />
+    <Compile Include="Extensions\IdentityExtensions.cs" />
+    <Compile Include="Extensions\InvitationExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\AuthorizeHouseholdRequired.cs" />
+    <Compile Include="Helpers\BankAccountHelper.cs" />
+    <Compile Include="Helpers\BudgetItemsHelper.cs" />
+    <Compile Include="Helpers\BudgetsHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\HouseHelper.cs" />
+    <Compile Include="Helpers\InvitationHelper.cs" />
+    <Compile Include="Helpers\NotificationHelper.cs" />
+    <Compile Include="Helpers\RolesHelper.cs" />
     <Compile Include="Helpers\SlugMaker.cs" />
+    <Compile Include="Helpers\TransactionHelper.cs" />
+    <Compile Include="Helpers\TransactionHistoryHelper.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BankAccount.cs" />
     <Compile Include="Models\Budget.cs" />
@@ -198,8 +212,15 @@
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\BankAccountWizardVM.cs" />
+    <Compile Include="ViewModels\BudgetWizardVM.cs" />
+    <Compile Include="ViewModels\ConfigureHouseVM.cs" />
+    <Compile Include="ViewModels\TransactionVM.cs" />
+    <Compile Include="ViewModels\UpdateProfileVM.cs" />
+    <Compile Include="Extensions\TransactionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Avatars\default_avatar.png" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\cryptocurrency-icons.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -279,6 +300,8 @@
     <Content Include="Images\flags\flag-2.jpg" />
     <Content Include="Images\flags\flag-3.jpg" />
     <Content Include="Images\flags\flag-4.jpg" />
+    <Content Include="Images\fplogo1.png" />
+    <Content Include="Images\fplogo2.png" />
     <Content Include="Images\gallery\profile-gallery-1.jpg" />
     <Content Include="Images\gallery\profile-gallery-2.jpg" />
     <Content Include="Images\gallery\profile-gallery-3.jpg" />
@@ -306,6 +329,7 @@
     <Content Include="Images\icons\select-arrow-down.png" />
     <Content Include="Images\icons\table-check.png" />
     <Content Include="Images\icons\zip.png" />
+    <Content Include="Images\logbg.jpg" />
     <Content Include="Images\logo\logo-light.png" />
     <Content Include="Images\logo\logo.png" />
     <Content Include="Images\mail\attach-1.png" />
@@ -386,10 +410,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Avatars\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Uploads\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -433,6 +454,15 @@
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
+    <Content Include="Views\Manage\UpdateProfile.cshtml" />
+    <Content Include="Views\Households\ConfigureHouse.cshtml" />
+    <Content Include="Private.config" />
+    <Content Include="Views\Account\AcceptInvitation.cshtml" />
+    <Content Include="Views\Households\ExitDenied.cshtml" />
+    <Content Include="Views\Households\ChangeHead.cshtml" />
+    <Content Include="Views\BankAccounts\AddAccount.cshtml" />
+    <Content Include="Views\Shared\_BankAccountModal.cshtml" />
+    <None Include="Properties\PublishProfiles\SwaneyFinancialPortal - Web Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -461,6 +491,11 @@
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
+    <MonoDevelop>
+      <Properties>
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

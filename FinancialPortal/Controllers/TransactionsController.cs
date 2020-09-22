@@ -7,6 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FinancialPortal.Models;
+using FinancialPortal.Extensions;
+using FinancialPortal.ViewModels;
+using FinancialPortal.Enums;
 
 namespace FinancialPortal.Controllers
 {
@@ -39,9 +42,9 @@ namespace FinancialPortal.Controllers
         // GET: Transactions/Create
         public ActionResult Create()
         {
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId");
+            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "AccountName");
             ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName");
-            ViewBag.OwnerId = new SelectList(db.ApplicationUsers, "Id", "FirstName");
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName");
             return View();
         }
 
@@ -56,14 +59,37 @@ namespace FinancialPortal.Controllers
             {
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
+                transaction.UpdateBalances();
                 return RedirectToAction("Index");
             }
 
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);
             ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
-            ViewBag.OwnerId = new SelectList(db.ApplicationUsers, "Id", "FirstName", transaction.OwnerId);
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
             return View(transaction);
         }
+
+        ////GET: Transactions/CreateDeposit
+        //public ActionResult CreateDeposit()
+        //{
+        //    var model = new TransactionsVM();
+        //    model.TransactionType = TransactionType.Deposit;
+        //    return View(model);
+        //}
+        
+        ////POST: Transactions/CreateDeposit
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult CreateDeposit(TransactionsVM model)
+        //{
+        //    if(ModelState.IsValid)
+        //    {
+        //        var transaction = new Transaction()
+        //        {
+        //            AccountId = model.Bank
+        //        };
+        //    }
+        //}
 
         // GET: Transactions/Edit/5
         public ActionResult Edit(int? id)
@@ -79,7 +105,7 @@ namespace FinancialPortal.Controllers
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);
             ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
-            ViewBag.OwnerId = new SelectList(db.ApplicationUsers, "Id", "FirstName", transaction.OwnerId);
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
             return View(transaction);
         }
 
@@ -92,13 +118,18 @@ namespace FinancialPortal.Controllers
         {
             if (ModelState.IsValid)
             {
+                var oldTransaction = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
+
+                var newTransaction = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
+                //newTransaction.EditTransaction(oldTransaction, newTransaction);
+                
                 return RedirectToAction("Index");
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);
             ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
-            ViewBag.OwnerId = new SelectList(db.ApplicationUsers, "Id", "FirstName", transaction.OwnerId);
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
             return View(transaction);
         }
 

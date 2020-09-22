@@ -1,9 +1,17 @@
 ﻿@model IEnumerable<FinancialPortal.Models.Household>
+@using FinancialPortal.Helpers
+@using FinancialPortal.ViewModels
+
 
 @{
     ViewBag.Title = "Index";
+    var userHelper = new UserHelper();
 }
-
+<br />
+<br />
+<br />
+<br />
+<br />
 <h2>Index</h2>
 
 <p>
@@ -12,40 +20,55 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.HouseholdName)
+            Household Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Greeting)
+            Greeting
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Created)
+            Created
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsDeleted)
+            Deleted House?
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+    @foreach (var item in )
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HouseholdName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Greeting)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+@*<table class="table">
+    <tr>
+        <th>
+            Household Name
+        </th>
+    </tr>
+@foreach(var user in )
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.HouseholdName)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Greeting)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Created)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsDeleted)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
     </tr>
-}
 
-</table>
+</table>*@

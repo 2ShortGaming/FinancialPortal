@@ -24,6 +24,13 @@ namespace FinancialPortal.Models
         public string RecipientEmail { get; set; }
 
         public Guid Code { get; set; }
+        public Invitation(int hhId)
+        {
+            HouseholdId = hhId;
+            Created = DateTime.Now;
+            IsValid = true;
+            TTL = 3;
+        }
 
         public Invitation()
         {

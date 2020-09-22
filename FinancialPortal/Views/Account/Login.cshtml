@@ -26,7 +26,7 @@
 
     <!-- Icon Font CSS -->
     <link href="~/Content/material-design-iconic-font.min.css" rel="stylesheet" />
-    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylecomsheet" />
     <link href="~/Content/themify-icons.css" rel="stylesheet" />
     <link href="~/Content/cryptocurrency-icons.css" rel="stylesheet" />
 
@@ -38,7 +38,28 @@
 
     <!-- Main Style CSS -->
     <link href="~/Content/style.css" rel="stylesheet" />
-
+<style>
+    .land-bg {
+        background-image: url(../Images/logbg.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        min-height: 100vh;
+        height: 100%;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+</style>
 
 </head>
 
@@ -56,6 +77,14 @@
                         <div class="login-register-form-wrap">
 
                             <div class="content">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="~/Images/fplogo1.png" style="height:100px; width:100px" />
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+
                                 <h1>Sign in</h1>
                                
                             </div>
@@ -99,8 +128,8 @@
                                     <p>
                                         @Html.ActionLink("Register as a new user", "Register")
                                     </p>
-                                    @* Enable this once you have account confirmation enabled for password reset functionality
-                                        <p>
+                                    //Enable this once you have account confirmation enabled for password reset functionality
+                                        @*<p>
                                             @Html.ActionLink("Forgot your password?", "ForgotPassword")
                                         </p>*@
                                 }
@@ -109,10 +138,9 @@
                         </div>
                     </div>
 
-                    <div class="login-register-bg order-1 order-lg-2 col-lg-7 col-12">
+                    <div class="land-bg order-1 order-lg-2 col-lg-7 col-12">
                         <div class="content">
-                            <h1>Sign in</h1>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                          
                         </div>
                     </div>
 
@@ -153,7 +181,7 @@
     <section id="socialLoginForm">
         @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
     </section>*@
-</div>
+@*</div>*@
 
 
 @section Scripts {

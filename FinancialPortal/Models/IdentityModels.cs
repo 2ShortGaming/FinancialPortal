@@ -41,11 +41,24 @@ namespace FinancialPortal.Models
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<BankAccount> Accounts { get; set; }
 
+        public ApplicationUser()
+        {
+            Budgets = new HashSet<Budget>();
+            Notifications = new HashSet<Notification>();
+            Transactions = new HashSet<Transaction>();
+            Accounts = new HashSet<BankAccount>();
+            AvatarPath = "/Avatars/default_avatar.png";
+        }
+
         #endregion
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            var hhId = HouseholdId != null ? HouseholdId.ToString() : "";
+            userIdentity.AddClaim(new Claim("HouseholdId", hhId));
+            userIdentity.AddClaim(new Claim("FullName", FullName));
+            userIdentity.AddClaim(new Claim("AvatarPath", AvatarPath));
             // Add custom user claims here
             return userIdentity;
         }
@@ -64,18 +77,18 @@ namespace FinancialPortal.Models
         }
         public DbSet<BudgetItem> BudgetItems { get; set; }
 
-        public System.Data.Entity.DbSet<FinancialPortal.Models.BankAccount> BankAccounts { get; set; }
+        public DbSet<BankAccount> BankAccounts { get; set; }
 
-        public System.Data.Entity.DbSet<FinancialPortal.Models.Household> Households { get; set; }
+        public DbSet<Household> Households { get; set; }
 
-        public System.Data.Entity.DbSet<FinancialPortal.Models.ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Budget> Budgets { get; set; }
 
-        public System.Data.Entity.DbSet<FinancialPortal.Models.Budget> Budgets { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
 
-        public System.Data.Entity.DbSet<FinancialPortal.Models.Invitation> Invitations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
-        public System.Data.Entity.DbSet<FinancialPortal.Models.Notification> Notifications { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
-        public System.Data.Entity.DbSet<FinancialPortal.Models.Transaction> Transactions { get; set; }
+        
     }
 }

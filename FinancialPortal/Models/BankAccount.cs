@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using FinancialPortal.Enums;
+using FinancialPortal.Extensions;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +12,8 @@ namespace FinancialPortal.Models
     public class BankAccount
     {
         public int Id { get; set; }
-        public int HouseholdId { get; set; }
+        public int? HouseholdId { get; set; }
+        [Required]
         public string OwnerId { get; set; }
         public virtual Household Household { get; set; }
         public virtual ApplicationUser Owner { get; set; }
@@ -43,6 +46,7 @@ namespace FinancialPortal.Models
             Created = DateTime.Now;
             AccountName = accountName;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
+            HouseholdId = (int)HttpContext.Current.User.Identity.GetHouseholdId();
         }
         public BankAccount()
         {

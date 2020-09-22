@@ -7,6 +7,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FinancialPortal.Models;
+using System.Web.Configuration;
+using FinancialPortal.Extensions;
+using FinancialPortal.ViewModels;
 
 namespace FinancialPortal.Controllers
 {
@@ -15,7 +18,7 @@ namespace FinancialPortal.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        private ApplicationDbContext db = new ApplicationDbContext();
         public ManageController()
         {
         }
@@ -243,6 +246,29 @@ namespace FinancialPortal.Controllers
             AddErrors(result);
             return View(model);
         }
+
+        //GET: /Manage/UpdateProfile
+        public ActionResult UpdateProfile()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var model = new UpdateProfileVM(user);
+            return View(model);
+        }
+
+        //POST:
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateProfile(UpdateProfileVM model)
+        {
+            var user = db.Users.Find(model.Id);
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            //user.AvatarPath = WebConfigurationManager.AppSettings["DefaultAvatarPath"];
+            db.SaveChanges();
+            await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+            return RedirectToAction("UpdateProfile");
+        }
+
 
         //
         // GET: /Manage/SetPassword

@@ -13,20 +13,23 @@ using System.Net.Mail;
 using System.IO;
 using System.Web.Configuration;
 using FinancialPortal.Helpers;
+using System.Linq.Expressions;
+using FinancialPortal.Extensions;
 
 namespace FinancialPortal.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        private RolesHelper roleHelper = new RolesHelper();
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -38,9 +41,9 @@ namespace FinancialPortal.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -61,6 +64,7 @@ namespace FinancialPortal.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            AuthorizeExtensions.AutoLogOut(HttpContext);
             ViewBag.ReturnUrl = returnUrl;
             var model = new LoginViewModel();
             return View(model);
@@ -125,7 +129,7 @@ namespace FinancialPortal.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -201,6 +205,7 @@ namespace FinancialPortal.Controllers
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
+                        roleHelper.AddUserToRole(user.Id, "New User");
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                         // Send an email with this link
@@ -232,6 +237,95 @@ namespace FinancialPortal.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        [AllowAnonymous]
+        public ActionResult AcceptInvitaiton(string recipientEmail, string code)
+        {
+            var realGuid = Guid.Parse(code);
+            var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == recipientEmail && i.Code == realGuid);
+            if (invitation == null)
+            {
+                //create new fail case view - no invite found
+                return View("NotFoundError", invitation);
+            }
+            var expirationDate = invitation.Created.AddDays(invitation.TTL);
+            if (invitation.IsValid && DateTime.Now < expirationDate)
+            {
+                var householdName = db.Households.Find(invitation.HouseholdId).HouseholdName;
+                ViewBag.Greeting = $"Thank you for accepting my invitation to join the {householdName} House!";
+                var model = new AcceptInvitationVM()
+                {
+                    InvitationId = invitation.Id,
+                    Email = recipientEmail,
+                    Code = realGuid,
+                    HouseholdId = invitation.HouseholdId
+                };
+                return View(model);
+            }
+            return View("AcceptError", invitation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<ActionResult> AcceptInvitation(AcceptInvitationVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, HouseholdId = model.HouseholdId };
+                if(model.Avatar != null)
+                {
+                    var fileName = Path.GetFileName(model.Avatar.FileName);
+                    fileName = FileHelper.MakeUnique(fileName);
+                    model.Avatar.SaveAs(Path.Combine(Server.MapPath("~/Avatars/"), fileName));
+                    user.AvatarPath = "/Avatars/" + fileName;
+                }
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    roleHelper.UpdateUserRole(user.Id, "Member");
+                    InvitationHelper.MarkAsInvalid(model.InvitationId);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    //            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                    //            // Send an email with this link
+                    //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        [Authorize(Roles = "New User")]
+        [HttpPost]
+        public async Task<ActionResult> ManualJoin(string code)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var realGuid = Guid.Parse(code);
+            var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == user.Email && i.Code == realGuid);
+            if(invitation == null)
+            {
+                return View("NotFoundError");
+            }
+            var expirationDate = invitation.Created.AddDays(invitation.TTL);
+            if(invitation.IsValid && DateTime.Now < expirationDate)
+            {
+            InvitationHelper.MarkAsInvalid(invitation.Id);
+            user.HouseholdId = invitation.HouseholdId;
+                roleHelper.UpdateUserRole(user.Id, "Member");
+                await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+                return RedirectToAction("Index", "Home");
+            }
+            return View("AcceptError", invitation);
+        }
+  
+
 
         //
         // GET: /Account/ConfirmEmail
@@ -272,10 +366,10 @@ namespace FinancialPortal.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -428,10 +522,10 @@ namespace FinancialPortal.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser 
-                { 
-                    UserName = model.Email, 
-                    Email = model.Email 
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
                 };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)

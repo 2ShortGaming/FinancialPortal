@@ -43,6 +43,10 @@ namespace FinancialPortal.Helpers
             return null;
         }
 
+        public List<ApplicationUser> ListUsers()
+        {
+            return db.Users.ToList();
+        }
         //public string GetUserAccounts()
         //{
         //    var userId = HttpContext.Current.User.Identity.GetUserId();

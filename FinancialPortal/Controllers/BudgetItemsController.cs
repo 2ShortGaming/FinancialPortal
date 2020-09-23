@@ -48,8 +48,12 @@ namespace FinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,BudgetId,Created,ItemName,TargetAmount,CurrentAmount,IsDeleted")] BudgetItem budgetItem)
+        public ActionResult Create([Bind(Include = "Id,BudgetId,ItemName,TargetAmount")] BudgetItem budgetItem)
         {
+            budgetItem.Created = DateTime.Now;
+            budgetItem.IsDeleted = false;
+            budgetItem.CurrentAmount = 0;
+
             if (ModelState.IsValid)
             {
                 db.BudgetItems.Add(budgetItem);

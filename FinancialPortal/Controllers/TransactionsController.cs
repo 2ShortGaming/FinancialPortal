@@ -10,6 +10,7 @@ using FinancialPortal.Models;
 using FinancialPortal.Extensions;
 using FinancialPortal.ViewModels;
 using FinancialPortal.Enums;
+using Microsoft.AspNet.Identity;
 
 namespace FinancialPortal.Controllers
 {
@@ -53,43 +54,140 @@ namespace FinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,AccountId,BudgetItemId,OwnerId,Created,Amount,Memo,IsDeleted")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "Id,AccountId,BudgetItemId,Amount,Memo")] Transaction transaction)
         {
+            transaction.Created = DateTime.Now;
+            transaction.OwnerId = User.Identity.GetUserId();
+            transaction.IsDeleted = false;
             if (ModelState.IsValid)
             {
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
-                transaction.UpdateBalances();
-                return RedirectToAction("Index");
+                var thisTransaction = db.Transactions.Include(t => t.BudgetItem).FirstOrDefault(t => t.Id == transaction.Id);
+                thisTransaction.UpdateBalances();
+                var bankAccount = db.BankAccounts.Find(db.Transactions.Find(thisTransaction.Id).AccountId);
+                if(bankAccount.CurrentBalance < 0)
+                {
+                    TempData["WarningBalance"] += "<p class\"text-danger\">Created Transaction has overdrawn your account!</p>";
+                }  
+                else if(bankAccount.CurrentBalance < bankAccount.WarningBalance)
+                {
+                    TempData["WarningBalance"] += "<p class\"text-danger\"> Created Transaction has brought your account under the warning balance!</p>";
+                }
+                //transaction.UpdateBalances();
+                return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);
-            ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
+            //ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerId", transaction.AccountId);
+            //ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName", transaction.BudgetItemId);
+            //ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
             return View(transaction);
         }
 
-        ////GET: Transactions/CreateDeposit
-        //public ActionResult CreateDeposit()
-        //{
-        //    var model = new TransactionsVM();
-        //    model.TransactionType = TransactionType.Deposit;
-        //    return View(model);
-        //}
-        
-        ////POST: Transactions/CreateDeposit
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult CreateDeposit(TransactionsVM model)
-        //{
-        //    if(ModelState.IsValid)
-        //    {
-        //        var transaction = new Transaction()
-        //        {
-        //            AccountId = model.Bank
-        //        };
-        //    }
-        //}
+        //GET: Transactions/CreateDeposit
+        public ActionResult CreateDeposit()
+        {
+            var model = new TransactionVM();
+            model.TransactionType = TransactionType.Deposit;
+            return View(model);
+        }
+
+        //POST: Transactions/CreateDeposit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateDeposit(TransactionVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var transaction = new Transaction()
+                {
+                    AccountId = model.AccountId,
+                    BudgetItemId = model.BudgetItemId,
+                    OwnerId = User.Identity.GetUserId(),
+                    TransactionType = model.TransactionType,
+                    Created = DateTime.Now,
+                    Amount = model.Amount,
+                    Memo = model.Memo,
+                    IsDeleted = false
+                };
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
+
+                var thisTransaction = db.Transactions.Include(t => t.BudgetItem).FirstOrDefault(t => t.Id == transaction.Id);
+                thisTransaction.UpdateBalances();
+
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.ErrorMessage = "Something went wrong.  Please try again.";
+            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "AccountName");
+            ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName");
+
+            var trans = new TransactionVM();
+            trans.TransactionType = TransactionType.Deposit;
+
+            return View(trans);
+        }
+
+        public PartialViewResult _TransactionModal(int accountId)
+        {
+            var model = new Transaction()
+            {
+                AccountId = accountId
+            };
+            ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName");
+            return PartialView(model);
+        }
+
+        // GET: Transactions/CreateWithdrawal
+        public ActionResult CreateWithdrawal()
+        {
+            ViewBag.BankAccountId = new SelectList(db.BankAccounts, "Id", "AccountName");
+            ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName");
+
+            var model = new TransactionVM();
+            model.TransactionType = TransactionType.Withdrawal;
+            return View(model);
+        }
+
+        // POST: Transactions/CreateWithdrawal
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateWithdrawal(TransactionVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var transaction = new Transaction()
+                {
+                    AccountId = model.AccountId,
+                    BudgetItemId = model.BudgetItemId,
+                    OwnerId = User.Identity.GetUserId(),
+                    TransactionType = model.TransactionType,
+                    Created = DateTime.Now,
+                    Amount = model.Amount,
+                    Memo = model.Memo,
+                    IsDeleted = false
+                };
+
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
+
+                var thisTransaction = db.Transactions.Include(t => t.BudgetItem).FirstOrDefault(t => t.Id == transaction.Id);
+                thisTransaction.UpdateBalances();
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.ErrorMessage = "Something went wrong.  Please try again.";
+            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "AccountName");
+            ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "ItemName");
+
+            var trans = new TransactionVM();
+            trans.TransactionType = TransactionType.Withdrawal;
+
+            return View(trans);
+        }
 
         // GET: Transactions/Edit/5
         public ActionResult Edit(int? id)

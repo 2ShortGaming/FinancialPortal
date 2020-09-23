@@ -1,11 +1,11 @@
 ﻿@model FinancialPortal.Models.BankAccount
 @using FinancialPortal.Extensions
-@using (Html.BeginForm("Create", "BankAccounts", FormMethod.Post)) 
+@using (Html.BeginForm("Create", "BankAccounts", FormMethod.Post, new { id = "accountModal" }))
 {
     @Html.AntiForgeryToken()
     @Html.Hidden("HouseholdId", User.Identity.GetHouseholdId())
     <div class="form-horizontal">
-        <h4>Add New Bank Account</h4>
+        
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
   

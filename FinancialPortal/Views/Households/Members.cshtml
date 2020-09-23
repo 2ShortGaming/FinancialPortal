@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FinancialPortal.Models.ApplicationUser>
+@using FinancialPortal.Helpers;
+@{
+    var userHelper = new UserHelper();
+    var houseHelper = new HouseHelper();
+}
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<div class="col-8 offset-2 mb-30">
+    <div class="box">
+        <div class="box-head">
+            Members
+        </div>
+        <div class="box-body">
+            <div class="table-responsive">
+                <table class="table table-vertical-middle table-selectable">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+
+                    </tr>
+
+                    @foreach (var item in houseHelper.ListHouseholdMembers().OrderBy(u => u.FirstName))
+                    {
+                        <tr>
+                            <td>
+                                @item.FirstName
+                            </td>
+                            <td>
+                                @item.LastName
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+
+
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

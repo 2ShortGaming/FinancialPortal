@@ -7,6 +7,8 @@
     var userHelper = new UserHelper();
     var roleHelper = new RolesHelper();
     var account = new FinancialPortal.Models.BankAccount();
+    var notificationHelper = new NotificationHelper();
+    var notifications = notificationHelper.ListUsersNotifications(User.Identity.GetUserId());
 }
 <!doctype html>
 <html class="no-js" lang="en">
@@ -29,10 +31,12 @@
 
     <!-- Icon Font CSS -->
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables.min.css" rel="stylesheet" />
+    <link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/dataTables.jqueryui.min.css" rel="stylesheet" />
     <link href="~/Content/material-design-iconic-font.min.css" rel="stylesheet" />
     <link href="~/Content/themify-icons.css" rel="stylesheet" />
     <link href="~/Content/cryptocurrency-icons.css" rel="stylesheet" />
-
     <!-- Plugins CSS -->
     <link href="~/Content/plugins.css" rel="stylesheet" />
 
@@ -97,143 +101,39 @@
 
                                 <ul class="header-notification-area">
 
-
-                                    <!--Mail-->
-                                    <li class="adomx-dropdown col-auto">
-                                        <a class="toggle" href="#"><i class="zmdi zmdi-email-open"></i><span class="badge"></span></a>
-
-                                        <!-- Dropdown -->
-                                        <div class="adomx-dropdown-menu dropdown-menu-mail">
-                                            <div class="head">
-                                                <h4 class="title">You have 3 new mail.</h4>
-                                            </div>
-                                            <div class="body custom-scroll">
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">
-                                                            <div class="image"><img src="~/Images/avatar/avatar-2.jpg" alt=""></div>
-                                                            <div class="content">
-                                                                <h6>Sub: New Account</h6>
-                                                                <p>There are many variations of passages of Lorem Ipsum available. </p>
-                                                            </div>
-                                                            <span class="reply"><i class="zmdi zmdi-mail-reply"></i></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <div class="image"><img src="~/Images/avatar/avatar-1.jpg" alt=""></div>
-                                                            <div class="content">
-                                                                <h6>Sub: Mail Support</h6>
-                                                                <p>There are many variations of passages of Lorem Ipsum available. </p>
-                                                            </div>
-                                                            <span class="reply"><i class="zmdi zmdi-mail-reply"></i></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <div class="image"><img src="~/Images/avatar/avatar-2.jpg" alt=""></div>
-                                                            <div class="content">
-                                                                <h6>Sub: Product inquiry</h6>
-                                                                <p>There are many variations of passages of Lorem Ipsum available. </p>
-                                                            </div>
-                                                            <span class="reply"><i class="zmdi zmdi-mail-reply"></i></span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <div class="image"><img src="~/Images/avatar/avatar-1.jpg" alt=""></div>
-                                                            <div class="content">
-                                                                <h6>Sub: Mail Support</h6>
-                                                                <p>There are many variations of passages of Lorem Ipsum available. </p>
-                                                            </div>
-                                                            <span class="reply"><i class="zmdi zmdi-mail-reply"></i></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                    </li>
-
                                     <!--Notification-->
                                     <li class="adomx-dropdown col-auto">
-                                        <a class="toggle" href="#"><i class="zmdi zmdi-notifications"></i><span class="badge"></span></a>
+                                        <a class="toggle" href="#">
+                                            <i class="zmdi zmdi-notifications"></i>
+                                            @if (notifications.Where(n => n.IsRead == false).ToList().Count > 0)
+                                            {
+                                                <span class="badge"></span>
+                                            }
+                                        </a>
 
                                         <!-- Dropdown -->
                                         <div class="adomx-dropdown-menu dropdown-menu-notifications">
                                             <div class="head">
-                                                <h5 class="title">You have 4 new notification.</h5>
+                                                <h5>@notifications.Where(n => n.IsRead == false).ToList().Count Notifications</h5>
                                             </div>
                                             <div class="body custom-scroll">
                                                 <ul>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-notifications-none"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-block"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-info-outline"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-shield-security"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-notifications-none"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-block"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-info-outline"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="zmdi zmdi-shield-security"></i>
-                                                            <p>There are many variations of pages available.</p>
-                                                            <span>11.00 am   Today</span>
-                                                        </a>
-                                                        <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
-                                                    </li>
+                                                    @foreach (var note in notifications.Where(n => n.IsRead == false).ToList().Take(5))
+                                                    {
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="zmdi zmdi-notifications-none"></i>
+                                                                <p>New Notification</p>
+
+                                                            </a>
+                                                            <button class="delete"><i class="zmdi zmdi-close-circle-o"></i></button>
+                                                        </li>
+                                                    }
+                                                
                                                 </ul>
                                             </div>
                                             <div class="footer">
-                                                <a href="#" class="view-all">view all</a>
+                                                <a href="@Url.Action("Index", "Notifications")" class="view-all">View all</a>
                                             </div>
                                         </div>
 
@@ -298,29 +198,40 @@
 
                 <nav class="side-header-menu" id="side-header-menu">
                     <ul>
-                        <li class="has-sub-menu">
-                            <a href="#"><i class="ti-home"></i> <span>Dashboard</span></a>
-                            <ul class="side-header-sub-menu">
-                                <li><a href="index.html"><span></span></a></li>
 
-                            </ul>
-                        </li>
                         <li class="has-sub-menu">
                             <a href="#"><i class="ti-home"></i> <span>Household</span></a>
                             <ul class="side-header-sub-menu">
-                                <li><a href="elements-alerts.html"><span>Dashboard</span></a></li>
-                                <li><a href="@Url.Action("Index", "Transactions")"><i class="zmdi zmdi-confirmation-number"></i> <span>Transactions</span></a></li>
                                 <li><a href="@Url.Action("Index", "BankAccounts")"><span>Accounts</span></a></li>
-                                <li><a href="elements-badge.html"><i class="zmdi zmdi-accounts"></i> <span>Members</span></a></li>
-                                <li><a href="@Url.Action("ConfigureHouse", "HouseHold")"><span>Create a Household</span></a></li>
+                                <li><a href="@Url.Action("Members", "Households")"><i class="zmdi zmdi-accounts"></i> <span>Members</span></a></li>
+                                <li><a href="@Url.Action("ConfigureHouse", "HouseHold")"><i class="zmdi zmdi-home"></i> <span>Create a Household</span></a></li>
                             </ul>
                         </li>
                         <li class="has-sub-menu">
                             <a href="#"><i class="zmdi zmdi-balance"></i> <span>Bank Accounts</span></a>
                             <ul class="side-header-sub-menu">
                                 <li><a href="@Url.Action("Index", "BankAccounts")"><span>View Accounts</span></a></li>
-                              
+
                                 <li><a data-toggle="modal" data-target="#addAccount"><i class="zmdi zmdi-plus-circle"></i> <span>Add Bank Account</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="has-sub-menu">
+                            <a href="#"><i class="zmdi zmdi-balance-wallet"></i> <span>Transactions</span></a>
+                            <ul class="side-header-sub-menu">
+                                <li><a href="@Url.Action("Index", "Transactions")"><i class="zmdi zmdi-confirmation-number"></i> <span>All Transactions</span></a></li>
+                                <li><a href="@Url.Action("Create", "Transactions")"><i class="zmdi zmdi-plus-circle"></i> <span>Create Transaction</span></a></li>
+                                @*<li><a data-toggle="modal" data-target="#addTransaction"><i class="zmdi zmdi-plus-circle"></i> <span>Create Transaction</span></a></li>*@
+                                @*<li><a href="@Url.Action("CreateDeposit", "Transactions")"><i class="zmdi zmdi-plus"></i> <span>Make a Deposit</span></a></li>
+                <li><a href="@Url.Action("CreateWithdrawal", "Transactions")"><i class="zmdi zmdi-minus"></i> <span>Make a Withdrawal</span></a></li>*@
+                            </ul>
+                        </li>
+                        <li class="has-sub-menu">
+                            <a href="#"><i class="ti-stats-up"></i> <span>Budgets</span></a>
+                            <ul class="side-header-sub-menu">
+                                <li><a href="@Url.Action("Index", "Budgets")"><i class="zmdi zmdi-trending-flat"></i> <span>All Budgets</span></a></li>
+                                <li><a href="@Url.Action("Create", "Budgets")"><i class="zmdi zmdi-plus-circle"></i> <span>Create Budget</span></a></li>
+                                <li><a href="@Url.Action("Index", "BudgetItems")"><i class="zmdi zmdi-shopping-cart"></i> <span>All Budget Items</span></a></li>
+                                <li><a href="@Url.Action("Create", "BudgetItems")"><i class="zmdi zmdi-plus-circle"></i> <span>Create Budget Item</span></a></li>
                             </ul>
                         </li>
                         <li class="has-sub-menu">
@@ -349,8 +260,6 @@
                                 </li>
                             </ul>
                         </li>
-
-
 
                     </ul>
 
@@ -533,6 +442,33 @@
         </div>
     </section>
 
+    @*<section id="addTransactionModal">
+     Modal 
+    <div id="addTransaction" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+     Modal content
+    <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Create A Transaction</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        @Html.Action("_TransactionModal", "Transactions")
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="button button-outline button-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>*@
     <!-- JS
     ============================================ -->
     <!-- Global Vendor, plugins & Activation JS -->
@@ -540,6 +476,9 @@
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script src="~/Scripts/popper.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/datatables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/dataTables.jqueryui.min.js"></script>
     <!--Plugins JS-->
     <script src="~/Scripts/perfect-scrollbar.min.js"></script>
     <script src="~/Scripts/tippy4.min.js.js"></script>

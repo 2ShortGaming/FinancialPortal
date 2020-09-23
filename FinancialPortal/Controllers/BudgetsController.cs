@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FinancialPortal.Models;
+using Microsoft.AspNet.Identity;
 
 namespace FinancialPortal.Controllers
 {
@@ -49,8 +50,11 @@ namespace FinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseholdId,OwnerId,BudgetName,CurrentAmount")] Budget budget)
+        public ActionResult Create([Bind(Include = "Id,HouseholdId,BudgetName")] Budget budget)
         {
+            budget.Created = DateTime.Now;
+            budget.OwnerId = User.Identity.GetUserId();
+            budget.CurrentAmount = 0;
             if (ModelState.IsValid)
             {
                 db.Budgets.Add(budget);

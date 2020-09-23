@@ -223,6 +223,9 @@
     <Content Include="Avatars\default_avatar.png" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\cryptocurrency-icons.css" />
+    <Content Include="Content\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\dataTables.jqueryui.min.css" />
+    <Content Include="Content\datatables.min.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\helper.css" />
     <Content Include="Content\material-design-iconic-font.min.css" />
@@ -358,6 +361,9 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\chartjs.active.js" />
+    <Content Include="Scripts\dataTables.bootstrap4.min.js" />
+    <Content Include="Scripts\dataTables.jqueryui.min.js" />
+    <Content Include="Scripts\datatables.min.js" />
     <Content Include="Scripts\daterangepicker.active.js" />
     <Content Include="Scripts\daterangepicker.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -463,6 +469,10 @@
     <Content Include="Views\BankAccounts\AddAccount.cshtml" />
     <Content Include="Views\Shared\_BankAccountModal.cshtml" />
     <None Include="Properties\PublishProfiles\SwaneyFinancialPortal - Web Deploy.pubxml" />
+    <Content Include="Views\Transactions\CreateWithdrawal.cshtml" />
+    <Content Include="Views\Transactions\CreateDeposit.cshtml" />
+    <Content Include="Views\Households\Members.cshtml" />
+    <Content Include="Views\Shared\_TransactionModal.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

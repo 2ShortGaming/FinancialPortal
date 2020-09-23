@@ -42,7 +42,11 @@ namespace FinancialPortal.Helpers
             }
             return validNotifcations;
         }
-     
 
+        public List<Notification> ListUsersNotifications(string userId)
+        {
+            var currentUserId = HttpContext.Current.User.Identity.GetUserId();
+            return db.Notifications.Where(n => n.RecipientId == currentUserId && !n.IsRead).OrderByDescending(n => n.Created).ToList();
+        }
     }
 }

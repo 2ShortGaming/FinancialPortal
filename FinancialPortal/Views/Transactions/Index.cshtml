@@ -5,7 +5,7 @@
     var transactionHelper = new TransactionHelper();
 }
 
-<h2>Index</h2>
+
 
 <br />
 <br />
@@ -21,17 +21,12 @@
 <div class="col-12 mb-30">
     <div class="box">
         <div class="box-head">
-            <h4 class="title">Accounts Overview</h4>
+            <h4 class="title">Transactions Overview</h4>
         </div>
         <div class="box-body">
-            @*<div class="col-5 offset-9">
-                <button type="button" class="col-md-5 button button-primary button-outline" data-toggle="modal" data-target="#addBankAccount">
-                    Add Bank Account
-                </button>
-                </div>*@
             <div class="table-responsive">
                 <table class="table table-vertical-middle table-selectable">
-
+                    <thead>
                     <tr>
 
                         <th>
@@ -49,14 +44,13 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Memo)
                         </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.IsDeleted)
-                        </th>
+                        
                         <th></th>
                     </tr>
+                        </thead>
 
                     @foreach (var item in transactionHelper.ListHouseholdTransactions().OrderByDescending(t => t.Created))
-                    {
+                    {<tbody>
                         <tr>
 
                             <td>
@@ -74,15 +68,14 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Memo)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IsDeleted)
-                            </td>
+                            
                             <td>
                                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                             </td>
                         </tr>
+                    </tbody>
                     }
 
                 </table>
@@ -90,3 +83,8 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script>
+        $('#table').DataTable();
+    </script>
+    }

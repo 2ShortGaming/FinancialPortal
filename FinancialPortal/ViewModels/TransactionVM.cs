@@ -8,14 +8,12 @@ namespace FinancialPortal.ViewModels
 {
     public class TransactionVM
     {
-        public class TransactionsVM
-        {
+       
             public TransactionType TransactionType { get; set; }
             public int AccountId { get; set; }
             public int BudgetItemId { get; set; }
             public decimal Amount { get; set; }
             public string Memo { get; set; }
 
-        }
     }
 }

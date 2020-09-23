@@ -70,6 +70,45 @@ namespace FinancialPortal.Extensions
             }
         }
 
+        public static void VoidTransaction(this Transaction transaction)
+        {
+            var bankAccount = db.BankAccounts.Find(transaction.AccountId);
+            var budgetItem = db.BudgetItems.Find(transaction.BudgetItemId);
+            var budgetId = budgetItem.BudgetId;
+            var budget = db.Budgets.Find(budgetId);
+
+            switch (transaction.TransactionType)
+            {
+                case TransactionType.Deposit:
+                    // original steps when transaction was created:
+                    // bank account - increase current amount
+                    // budget item - do nothing
+                    // reverse these steps:
+                    bankAccount.CurrentBalance -= transaction.Amount;
+                    break;
+
+                case TransactionType.Withdrawal:
+                    // original steps when transaction was created:
+                    // Bank account - decrease current amount
+                    // Budget - increase current amount
+                    // BudgetItem - increase current amount
+                    // reverse these steps
+                    bankAccount.CurrentBalance += transaction.Amount;
+                    budget.CurrentAmount -= transaction.Amount;
+                    budgetItem.CurrentAmount -= transaction.Amount;
+                    break;
+
+                case TransactionType.Transfer:
+                default:
+                    // I'm not allowed, so do nothing.
+                    return;
+            }
+
+            transaction.IsDeleted = true;
+            db.SaveChanges();
+            return;
+
+        }
 
         private static void ReverseUpdateBankBalance(Transaction transaction)
         {

@@ -20,10 +20,17 @@ namespace FinancialPortal.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private RolesHelper roleHelper = new RolesHelper();
+        private HouseHelper houseHelper = new HouseHelper();
         // GET: Households
         public ActionResult Index()
         {
             return View(db.Households.ToList());
+        }
+
+        //GET: Members
+        public ActionResult Members()
+        {
+            return View(houseHelper.ListHouseholdMembers());
         }
 
         // GET: Households/Details/5

@@ -59,7 +59,7 @@ namespace FinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "New User")]
+        [Authorize(Roles = "New User")]
         public async Task<ActionResult> Create([Bind(Include = "Id,HouseholdName,Greeting")] Household household)
         {
             if (ModelState.IsValid)
@@ -85,7 +85,7 @@ namespace FinancialPortal.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Head")]
+        [Authorize(Roles = "Head")]
         public ActionResult ConfigureHouse()
         {
             var model = new ConfigureHouseVM();
